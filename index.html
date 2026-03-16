@@ -57,7 +57,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            perspective: 1000px; /* For the 3D tilt effect */
+            perspective: 1000px;
         }
 
         #invite-img {
@@ -137,7 +137,6 @@
 
         .action-btn:hover { background: var(--accent); color: white; transform: translateY(-3px); }
 
-        /* Mobile specific adjustment */
         @media (max-width: 600px) {
             #invite-img { max-height: 65vh; }
         }
@@ -147,10 +146,7 @@
 
     <div id="bg-container"></div>
     
-    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
-
     <script>
-        // Create petals with random paths
         for (let i = 0; i < 20; i++) {
             let p = document.createElement('div');
             p.className = 'petal';
@@ -177,7 +173,7 @@
         <img src="ENGAGEMENT_v2.png" id="invite-img" alt="Invitation">
         
         <div class="button-group">
-            <a class="action-btn" href="https://www.google.com/maps/search/?api=1&query=Sree+Meenakshi+Mahal+Velliyanai+Karur" target="_blank">
+            <a class="action-btn" href="https://www.google.com/maps/dir/Velliyanai+Bus+stop,+R4W9%2BVWQ,+Velliyanai,+Tamil+Nadu+639118/Sree+Meenatchi+Mahal,+Vijayapuram+Road,+Velliyanai,+Vellianai+North,+Tamil+Nadu+639118/@10.8460556,78.1106913,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x3baa3b58f3a60981:0x423063b6de85de52!2m2!1d78.1195015!2d10.8477343!1m5!1m1!1s0x3baa3b9e57cd17ab:0x9096f4b576b54566!2m2!1d78.1119323!2d10.8453618!3e2?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
                 📍 View Location
             </a>
             <a class="action-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Karthikeyan+Engagement&dates=20260406T090000Z/20260406T140000Z&details=Engagement+Ceremony&location=Sree+Meenakshi+Mahal,+Velliyanai,+Karur" target="_blank">
@@ -191,12 +187,7 @@
             document.getElementById('body-tag').classList.add('revealed');
             document.getElementById('overlay-text').style.display = 'none';
             
-            // 1. Play Music
-            const music = document.getElementById('bg-music');
-            music.volume = 0.4;
-            music.play().catch(() => console.log("Music play blocked by browser"));
-
-            // 2. Confetti Burst
+            // Confetti Burst
             var duration = 3 * 1000;
             var end = Date.now() + duration;
 
@@ -222,7 +213,7 @@
             }());
         }
 
-        // 3. Card Tilt Effect (Desktop Only)
+        // Card Tilt Effect
         const img = document.getElementById('invite-img');
         document.addEventListener('mousemove', (e) => {
             if(document.body.classList.contains('revealed') && window.innerWidth > 1000) {
