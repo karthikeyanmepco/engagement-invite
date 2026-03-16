@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karthikeyan ❤️ Akshaya Engagement</title>
+    <style>
+        :root {
+            --primary: #c9184a;
+            --accent: #ff4d6d;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            background-color: #000;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; /* Prevents scroll before reveal */
+        }
+
+        /* 1. Dynamic Background - Fits any screen */
+        #bg-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('ENGAGEMENT.png') no-repeat center center;
+            background-size: cover;
+            filter: blur(20px) brightness(0.5);
+            transform: scale(1.1); /* Prevents white edges from blur */
+            z-index: 1;
+            transition: filter 2s ease;
+        }
+
+        /* 2. Content Wrapper */
+        #wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 3. The Invitation Image - Responsive */
+        #invite-img {
+            max-width: 90%;
+            max-height: 80vh; /* Limits height on landscape/desktop */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            display: none; /* Hidden initially */
+            animation: zoomIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* 4. Interactive Overlay */
+        #overlay-text {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .kavidhai {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .btn-open {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Reveal State */
+        .revealed #bg-container { filter: blur(8px) brightness(0.4); }
+        .revealed #overlay-text { display: none; }
+        .revealed #invite-img { display: block; }
+        .revealed { overflow-y: auto; } /* Allows scrolling on small phones if needed */
+
+        /* Location Button */
+        #map-btn {
+            display: none;
+            margin-top: 25px;
+            background: white;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .revealed #map-btn { display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <div id="bg-container"></div>
+
+    <div id="wrapper">
+        <div id="overlay-text">
+            <div class="kavidhai">
+                இரு மனங்கள் இணையும் <br>
+                இனியதொரு தொடக்கம்... <br>
+                <small style="font-size: 0.6em; opacity: 0.8;">(A beautiful beginning of two hearts uniting)</small>
+            </div>
+            <button class="btn-open" onclick="reveal()">நிச்சயதார்த்த அழைப்பிதழ் திறக்கவும்</button>
+        </div>
+
+        <img src="ENGAGEMENT.png" id="invite-img" alt="Invitation">
+        
+        <a id="map-btn" href="https://maps.google.com/?q=Sree+Meenakshi+Mahal+Velliyanai+Karur" target="_blank">
+            📍 View Location on Map
+        </a>
+    </div>
+
+    <script>
+        function reveal() {
+            document.body.classList.add('revealed');
+            
+            // Simple view counter logic could be placed here
+            console.log("Invitation opened at: " + new Date().toLocaleTimeString());
+        }
+    </script>
+</body>
+</html>
