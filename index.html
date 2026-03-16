@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karthikeyan ❤️ Akshaya</title>
     <link href="https://fonts.googleapis.com/css2?family=Arima:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         :root {
             --primary: #c9184a;
@@ -14,25 +16,24 @@
         body, html {
             margin: 0; padding: 0;
             height: 100%; width: 100%;
-            background-color: #000;
+            background-color: #0d0d0d;
             font-family: 'Arima', cursive;
             overflow: hidden;
+            color: white;
         }
 
-        /* 1. Background Layer */
         #bg-container {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: url('ENGAGEMENT_v2.png') no-repeat center center;
             background-size: cover;
-            filter: blur(15px) brightness(0.5);
+            filter: blur(15px) brightness(0.4);
             transform: scale(1.1);
             z-index: 1;
             transition: all 2.5s ease;
         }
 
-        /* 2. Floating Petals Animation */
         .petal {
             position: fixed;
             background-color: #ff4d6d;
@@ -40,14 +41,14 @@
             opacity: 0.3;
             z-index: 2;
             animation: drift 10s infinite linear;
+            pointer-events: none;
         }
 
         @keyframes drift {
-            0% { transform: translateY(-10vh) rotate(0deg); left: 10%; }
-            100% { transform: translateY(110vh) rotate(360deg); left: 90%; }
+            0% { transform: translateY(-10vh) rotate(0deg); left: var(--start-x); }
+            100% { transform: translateY(110vh) rotate(360deg); left: var(--end-x); }
         }
 
-        /* 3. Reveal Content */
         #wrapper {
             position: relative;
             z-index: 10;
@@ -56,87 +57,107 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            perspective: 1000px; /* For the 3D tilt effect */
         }
 
         #invite-img {
             max-width: 90%;
-            max-height: 80vh;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-height: 75vh;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             border-radius: 15px;
             display: none;
             opacity: 0;
-            transition: transform 10s infinite alternate; /* The 'breathing' effect */
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Initial Text & Button */
-        #overlay-text { text-align: center; color: white; transition: opacity 1s; }
+        #overlay-text { text-align: center; transition: opacity 1s; }
 
         .kavidhai {
             font-size: clamp(1.4rem, 5vw, 2.2rem);
             margin-bottom: 40px;
-            animation: fadeInOut 3s infinite ease-in-out;
+            animation: fadeInOut 3.5s infinite ease-in-out;
+            padding: 0 20px;
         }
 
         @keyframes fadeInOut {
-            0%, 100% { opacity: 0.7; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-5px); }
+            0%, 100% { opacity: 0.7; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
         }
 
         .btn-open {
-            background: var(--accent);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             color: white;
             border: none;
-            padding: 20px 45px;
-            font-size: 1.2rem;
+            padding: 22px 50px;
+            font-size: 1.3rem;
             border-radius: 50px;
             cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.4);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 77, 109, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 77, 109, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
         }
 
-        /* Revealed States */
-        .revealed #bg-container { filter: blur(5px) brightness(0.3); }
+        .revealed #bg-container { filter: blur(5px) brightness(0.2); }
         .revealed #invite-img { 
             display: block; 
             opacity: 1; 
-            animation: zoomIn 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), breathing 15s infinite alternate 1.5s; 
+            animation: zoomIn 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
         
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-        @keyframes breathing { from { transform: scale(1); } to { transform: scale(1.05); } }
+        @keyframes zoomIn { from { transform: scale(0.5) rotate(-5deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
 
-        #map-btn {
+        .button-group {
             display: none;
             margin-top: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .revealed .button-group { display: flex; animation: slideUp 1s ease 1s forwards; opacity: 0; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .action-btn {
             background: white;
             color: var(--primary);
-            padding: 12px 30px;
+            padding: 12px 25px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: bold;
-            animation: slideUp 1s ease forwards;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
         }
 
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .revealed #map-btn { display: inline-block; }
+        .action-btn:hover { background: var(--accent); color: white; transform: translateY(-3px); }
+
+        /* Mobile specific adjustment */
+        @media (max-width: 600px) {
+            #invite-img { max-height: 65vh; }
+        }
     </style>
 </head>
 <body id="body-tag">
 
     <div id="bg-container"></div>
+    
+    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
     <script>
-        for (let i = 0; i < 15; i++) {
+        // Create petals with random paths
+        for (let i = 0; i < 20; i++) {
             let p = document.createElement('div');
             p.className = 'petal';
             p.style.width = Math.random() * 15 + 10 + 'px';
             p.style.height = p.style.width;
-            p.style.left = Math.random() * 100 + '%';
+            p.style.setProperty('--start-x', Math.random() * 100 + '%');
+            p.style.setProperty('--end-x', Math.random() * 100 + '%');
             p.style.animationDelay = Math.random() * 10 + 's';
             p.style.animationDuration = Math.random() * 5 + 7 + 's';
             document.body.appendChild(p);
@@ -146,8 +167,8 @@
     <div id="wrapper">
         <div id="overlay-text">
             <div class="kavidhai">
-                இரு மனங்கள் இணையும்
-	இனியதொரு தொடக்கம்..... ❤️ <br>
+                இரு மனங்கள் இணையும் <br>
+                இனியதொரு தொடக்கம்..... ❤️ <br>
                 <span style="font-size: 0.7em;">A beautiful journey begins</span>
             </div>
             <button class="btn-open" onclick="reveal()">நிச்சயதார்த்த அழைப்பிதழ் <br> (Open Invitation)</button>
@@ -155,16 +176,61 @@
 
         <img src="ENGAGEMENT_v2.png" id="invite-img" alt="Invitation">
         
-        <a id="map-btn" href="https://www.google.com/maps/dir/Velliyanai+Bus+stop,+R4W9%2BVWQ,+Velliyanai,+Tamil+Nadu+639118/Sree+Meenatchi+Mahal,+Vijayapuram+Road,+Velliyanai,+Vellianai+North,+Tamil+Nadu+639118/@10.8460556,78.1106913,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x3baa3b58f3a60981:0x423063b6de85de52!2m2!1d78.1195015!2d10.8477343!1m5!1m1!1s0x3baa3b9e57cd17ab:0x9096f4b576b54566!2m2!1d78.1119323!2d10.8453618!3e2?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
-            📍 View Venue Location
-        </a>
+        <div class="button-group">
+            <a class="action-btn" href="https://www.google.com/maps/search/?api=1&query=Sree+Meenakshi+Mahal+Velliyanai+Karur" target="_blank">
+                📍 View Location
+            </a>
+            <a class="action-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Karthikeyan+Engagement&dates=20260406T090000Z/20260406T140000Z&details=Engagement+Ceremony&location=Sree+Meenakshi+Mahal,+Velliyanai,+Karur" target="_blank">
+                📅 Save the Date
+            </a>
+        </div>
     </div>
 
     <script>
         function reveal() {
             document.getElementById('body-tag').classList.add('revealed');
             document.getElementById('overlay-text').style.display = 'none';
+            
+            // 1. Play Music
+            const music = document.getElementById('bg-music');
+            music.volume = 0.4;
+            music.play().catch(() => console.log("Music play blocked by browser"));
+
+            // 2. Confetti Burst
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff4d6d', '#c9184a', '#ffffff']
+              });
+              confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff4d6d', '#c9184a', '#ffffff']
+              });
+
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
         }
+
+        // 3. Card Tilt Effect (Desktop Only)
+        const img = document.getElementById('invite-img');
+        document.addEventListener('mousemove', (e) => {
+            if(document.body.classList.contains('revealed') && window.innerWidth > 1000) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                img.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
+        });
     </script>
 </body>
 </html>
